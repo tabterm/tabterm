@@ -1,0 +1,20 @@
+@import "node_modules/bootstrap/less/bootstrap.less";
+@import "node_modules/bootswatch/cyborg/bootswatch.less";
+@import "node_modules/bootswatch/cyborg/variables.less";
+@import (less) "node_modules/xterm/src/xterm.css";
+
+@icon-font-path: "fonts/";
+@tooltip-color: @dropdown-link-color;
+@tooltip-bg: @dropdown-bg;
+
+.full-height { height: 100%; }
+
+.tabterm-ui {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0; padding: 1em;
+
+  pointer-events: none;
+  > * {
+    pointer-events: auto;
+    &:not(:hover) { opacity: .5; }
+  }
+}
