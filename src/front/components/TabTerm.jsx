@@ -19,7 +19,7 @@ export default React.createClass({
       settings: {
         maxVisibleAlertCount: 5,
         css: '',
-        xtermOpts: {},
+        htermOpts: {},
         sessionOpts: {}
       },
       alerts: [],
@@ -28,7 +28,7 @@ export default React.createClass({
   },
   getInitialState () { return _.cloneDeep(this.constructor.initialState) },
   componentWillMount () {
-    this.context.app.tabterm = this
+    window.tabterm = this.context.app.tabterm = this
     try {
       this.setState({settings: JSON.parse(localStorage[this.constructor.displayName])})
     } catch (e) {}
@@ -64,7 +64,7 @@ export default React.createClass({
     let {
       props: {children, params: {sessionId}},
       state: {alerts, showSettings, title,
-        settings: {maxVisibleAlertCount, css, xtermOpts, sessionOpts}
+        settings: {maxVisibleAlertCount, css, htermOpts, sessionOpts}
       }
     } = this
     let invisibleAlerts = Math.max(0, alerts.length - maxVisibleAlertCount)
@@ -82,7 +82,7 @@ export default React.createClass({
         <div className={`full-height ${children ? 'hide' : ''}`}>
           <Terminal ref="terminal"
             sessionId={sessionId}
-            xtermOpts={xtermOpts} sessionOpts={sessionOpts}
+            htermOpts={htermOpts} sessionOpts={sessionOpts}
           />
         </div>
         <div className="container">

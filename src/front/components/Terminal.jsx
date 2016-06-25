@@ -2,41 +2,74 @@ import React from 'react'
 import _ from 'lodash'
 import $ from 'jquery'
 import io from 'socket.io-client'
-import Xterm from 'xterm'
-import 'xterm/addons/fit/fit'
+import {hterm, lib} from 'hterm-umdjs'
+hterm.defaultStorage = new lib.Storage.Memory() // FIXME: set this on the instance instead of globally
 
 import contextTypes from './contextTypes'
+
+// see also https://github.com/krishnasrinivas/wetty/blob/aa882adcebcdd49b93c11f9162a4e69f83580160/public/wetty/wetty.js
+class HtermHandler {
+  constructor (argv) {
+    this.component = argv.argString
+
+    this.argv_ = argv
+    this.io = null
+    this.pid_ = -1
+  }
+  run () {
+    let {component: {emitTTY, emitResize}, argv_} = this
+    this.io = _.merge(argv_.io.push(), {
+      onVTKeystroke: emitTTY,
+      sendString: emitTTY,
+      onTerminalResize: emitResize
+    })
+  }
+}
 
 export default React.createClass({
   contextTypes,
   statics: {
-    initialState: {
-      socketBuffer: {}
-    },
     defaultProps: {
       socketURL: (({protocol, hostname, port}) => `ws${protocol === 'https:' ? 's' : ''}://${hostname}${port ? `:${port}` : ''}`)(document.location),
-      xtermOpts: {},
+      htermOpts: {},
       sessionOpts: {}
     }
   },
-  getInitialState () { return _.cloneDeep(this.constructor.initialState) },
   getDefaultProps () { return _.cloneDeep(this.defaultProps) },
   componentDidMount () {
-    this.initXterm()
+    this.initHterm()
     this.connect()
-
-    $(window).on('resize', this.fitXterm)
   },
   componentDidUpdate (prevProps) {
     let {sessionOpts, socketURL} = this.props
     if (!_.isEqual(sessionOpts, prevProps.sessionOpts) || socketURL !== prevProps.socketURL) this.connect()
+    this.updateTerminalFromHtermOpts(prevProps.htermOpts)
   },
-  initXterm () {
-    this.xterm = new Xterm(this.props.xtermOpts)
-    this.xterm.open(this.refs.root)
-    this.xterm.on('data', this.emitXterm)
-    this.xterm.on('resize', this.emitResize)
-    this.xterm.on('title', this.setTitle)
+  initHterm () {
+    let t = this.hterm = new hterm.Terminal(this.props.sessionId)
+    t.setWindowTitle = this.setTitle
+    t.decorate(this.refs.root)
+    // t.onTerminalReady = () => {
+    //   _.merge(t.io.push(), {
+    //     onVTKeystroke: this.emitTTY,
+    //     sendString: this.emitTTY,
+    //     onTerminalResize: this.emitResize
+    //   })
+    // }
+    t.runCommandClass(HtermHandler, this)
+    this.updateTerminalFromHtermOpts()
+    t.prefs_.addObservers((key, val) => {
+      // FIXME: multiple fires on init
+      let {tabterm} = this.context
+      let {settings} = tabterm.state
+      settings.htermOpts[key] = val
+      tabterm.setState({settings})
+    })
+  },
+  updateTerminalFromHtermOpts (prevHtermOpts) {
+    _.each(this.props.htermOpts, (val, key) => {
+      if (!_.has(prevHtermOpts, key) || val !== _.get(prevHtermOpts, key)) this.hterm.prefs_.set(key, val)
+    })
   },
   connect () {
     this.socket = io(this.props.socketURL)
@@ -47,39 +80,28 @@ export default React.createClass({
   },
   onConnect () {
     let {socket, props: {sessionId, sessionOpts}} = this
-    socket.emit('init', _.merge(sessionId ? {sessionId} : {}, sessionOpts))
+    this.hterm.reset()
+    this.socketEmit('init', _.merge(sessionId ? {sessionId} : {}, sessionOpts))
   },
   onSession (sessionId) {
-    this.context.router.push(`/session/${sessionId}`)
-    this.fitXterm()
+    let {router, tabterm: {props: {location: {pathname}}}} = this.context
+    if (pathname === '/session') router.push(`/session/${sessionId}`)
+    this.initHterm()
   },
   onPTY (data) {
-    this.xterm.write(data)
+    this.hterm.io.writeUTF16(data)
   },
   setTitle (title) {
     this.context.tabterm.setState({title})
   },
-  socketEmit (evt, ...args) {
-    let {socket, state} = this
-    let {socketBuffer} = state
-    socketBuffer[evt] = [...(socketBuffer[evt] || []), args]
-    this.setState({socketBuffer})
-    if (!socket) return
-    socketBuffer[evt]
-      .splice(0, Infinity)
-      .forEach(bufferedArgs => { socket.emit(evt, ...bufferedArgs) })
+  socketEmit (...args) {
+    this.socket.emit(...args)
   },
-  emitXterm (data) {
-    this.socketEmit('xterm', data)
+  emitTTY (data) {
+    this.socketEmit('tty', data)
   },
-  emitResize ({rows, cols}) {
+  emitResize (cols, rows) {
     this.socketEmit('resize', {rows, cols})
-  },
-  fitXterm () {
-    this.xterm.fit()
-  },
-  componentWillUnmount () {
-    $(window).off('resize', this.fitXterm)
   },
 
   render () {

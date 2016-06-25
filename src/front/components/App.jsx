@@ -11,7 +11,7 @@ export default React.createClass({
   getChildContext () { return {app: this} },
   focusTerminal () {
     process.nextTick(() => {
-      this.tabterm.refs.terminal.xterm.focus()
+      this.tabterm.refs.terminal.hterm.focus()
     })
   },
   render () {

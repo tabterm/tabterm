@@ -15,7 +15,7 @@ class Session extends EventEmitter {
     clearTimeout(this.destroyTimeout)
     socket.emitPTY = this.createEmitPTY(socket)
     this.term.on('data', socket.emitPTY)
-    socket.on('xterm', data => { this.term.write(data) })
+    socket.on('tty', data => { this.term.write(data) })
     socket.on('resize', data => { this.term.resize(data.cols, data.rows) })
     socket.on('disconnect', () => { this.deregisterSocket(socket) })
     socket.emit('session', this.opts.sessionId)
