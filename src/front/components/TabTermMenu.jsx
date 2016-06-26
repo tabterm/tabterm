@@ -7,7 +7,7 @@ import pkg from '../../../package'
 export default React.createClass({
   render () {
     return (
-      <div className="btn-group pull-right">
+      <div className="tabterm-menu btn-group pull-right">
         <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {/*<span className="glyphicon glyphicon-console" aria-hidden="true" />*/}
           <img src="/assets/logo_white.png" alt=">_" width="32" height="32" />

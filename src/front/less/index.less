@@ -7,14 +7,15 @@
 @tooltip-color: @dropdown-link-color;
 @tooltip-bg: @dropdown-bg;
 
-.full-height { height: 100%; }
+.form-control { font-family: monospace; }
 
-.tabterm-ui {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0; padding: 1em;
+/*                                      *
+ * END OVERRIDES/START CUSTOM SELECTORS *
+ *                                      */
 
-  pointer-events: none;
-  > * {
-    pointer-events: auto;
-    &:not(:hover) { opacity: .5; }
-  }
+.tabterm-menu {
+  position: fixed; top: 0; right: 0; margin: 1em;
+  &:not(:hover) { opacity: .5; }
 }
+
+.full-height { height: 100%; }

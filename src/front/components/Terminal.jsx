@@ -108,7 +108,7 @@ export default React.createClass({
 
   render () {
     return (
-      <div ref="root" className="full-height"></div>
+      <div ref="root" className={`full-height ${this.props.className}`}></div>
     )
   }
 })

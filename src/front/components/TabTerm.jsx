@@ -79,34 +79,33 @@ export default React.createClass({
         />
         <style dangerouslySetInnerHTML={{__html: css}}></style>
 
-        <div className={`full-height ${children ? 'hide' : ''}`}>
-          <Terminal ref="terminal"
-            sessionId={sessionId}
-            htermOpts={htermOpts} sessionOpts={sessionOpts}
-          />
-        </div>
+        <Terminal ref="terminal"
+          className={children ? 'hide' : ''}
+          sessionId={sessionId}
+          sessionOpts={sessionOpts}
+          htermOpts={htermOpts}
+        />
+
         <div className="container">
+          {alerts.slice(0, maxVisibleAlertCount).map((alert, alertIndex) => (
+            <div className={`alert ${alert.className}`} role="alert" key={`alert-${alertIndex}`}>
+              <button
+                className="close"
+                aria-label="Close"
+                onClick={this.closeAlert.bind(this, alertIndex)}>
+                <span aria-hidden="true">&times;</span>
+              </button>
+              {alert.children}
+            </div>
+          ))}
+          {invisibleAlerts ? (
+            <p className="text-muted">{invisibleAlerts} alert{invisibleAlerts === 1 ? '' : 's'} not shown</p>
+          ) : ''}
+
           {children}
         </div>
-        <div className="tabterm-ui">
-          <TabTermMenu />
-          <div className="container">
-            {alerts.slice(0, maxVisibleAlertCount).map((alert, alertIndex) => (
-              <div className={`alert ${alert.className}`} role="alert" key={`alert-${alertIndex}`}>
-                <button
-                  className="close"
-                  aria-label="Close"
-                  onClick={this.closeAlert.bind(this, alertIndex)}>
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                {alert.children}
-              </div>
-            ))}
-            {invisibleAlerts ? (
-              <p className="text-muted">{invisibleAlerts} alert{invisibleAlerts === 1 ? '' : 's'} not shown</p>
-            ) : ''}
-          </div>
-        </div>
+
+        <TabTermMenu />
       </div>
     )
   }
