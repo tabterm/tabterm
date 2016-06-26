@@ -71,7 +71,7 @@ export default React.createClass({
     _.each(htermOpts, (val, key) => {
       if (!_.has(prevHtermOpts, key) || val !== _.get(prevHtermOpts, key)) hterm.prefs_.set(key, val)
     })
-    hterm.prefs_.set('user-css', `data:text/css;base64,${btoa(settings.css)}`) // FIXME: make an actual endpoint for this
+    hterm.prefs_.set('user-css', `data:text/css;utf-8,${settings.css}`) // FIXME: check if changed
   },
   connect () {
     this.socket = io(this.props.socketURL)
