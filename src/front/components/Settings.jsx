@@ -9,8 +9,8 @@ export default React.createClass({
   statics: {
     initialState: {}
   },
-  getInitialSettings () { return _.cloneDeep(this.context.tabterm.state.settings) },
-  getInitialState () { return _.merge({settings: this.getInitialSettings()}, this.constructor.initialState) },
+  getSavedSettings () { return _.cloneDeep(this.context.tabterm.state.settings) },
+  getInitialState () { return _.merge({settings: this.getSavedSettings()}, this.constructor.initialState) },
   componentDidMount () {
     $(window).on('keyup', this.onKeyUp)
   },
@@ -21,7 +21,7 @@ export default React.createClass({
     this.context.tabterm.setState({settings: this.state.settings}, this.cancel)
   },
   cancel () {
-    this.setState({settings: this.getInitialSettings()})
+    this.setState({settings: this.getSavedSettings()})
     this.context.router.goBack()
   },
   onChange ({target: {name, value}}) {
