@@ -67,9 +67,11 @@ export default React.createClass({
     })
   },
   updateTerminalFromHtermOpts (prevHtermOpts) {
-    _.each(this.props.htermOpts, (val, key) => {
-      if (!_.has(prevHtermOpts, key) || val !== _.get(prevHtermOpts, key)) this.hterm.prefs_.set(key, val)
+    let {hterm, props: {htermOpts}, context: {tabterm: {state: {settings}}}} = this
+    _.each(htermOpts, (val, key) => {
+      if (!_.has(prevHtermOpts, key) || val !== _.get(prevHtermOpts, key)) hterm.prefs_.set(key, val)
     })
+    hterm.prefs_.set('user-css', `data:text/css;base64,${btoa(settings.css)}`) // FIXME: make an actual endpoint for this
   },
   connect () {
     this.socket = io(this.props.socketURL)
