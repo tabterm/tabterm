@@ -4,8 +4,6 @@ What if your browser's new tab page was a terminal?
 
 ![screencast](assets/screencast.gif)
 
-[Instructions here](#new-tab-page).
-
 ## Installation
 ```sh
 $ npm install -g tabterm
