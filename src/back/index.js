@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 
-if (require.main === module) {
-  const gulp = require('gulp')
-  require('../../gulpfile')
-  gulp.start('default')
-}
-
 module.exports = require('./TabTermServer')
+
+if (require.main === module) new module.exports(require('../../config')).main()
