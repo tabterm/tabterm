@@ -1,6 +1,6 @@
 {
   "name": "tabterm",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "What if your browser's new tab page was a terminal? Based on Chrome OS's hterm",
   "homepage": "https://github.com/dbkaplun/tabterm#readme",
   "bugs": "https://github.com/dbkaplun/tabterm/issues",
