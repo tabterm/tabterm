@@ -1,9 +1,9 @@
-# ![>_](https://raw.githubusercontent.com/dbkaplun/tabterm/master/assets/logo_white_on_black.png) tabterm
+# ![>_](https://raw.githubusercontent.com/dbkaplun/tabterm/master/dist/assets/logo_white_on_black.png) tabterm
 
 What if your browser's new tab page was a terminal? Based on Chrome OS's
 [hterm](https://chromium.googlesource.com/apps/libapps/+/master/hterm).
 
-![screencast](assets/screencast.gif)
+![screencast](dist/assets/screencast.gif)
 
 ## Installation
 ```sh
