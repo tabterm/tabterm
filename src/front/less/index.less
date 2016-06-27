@@ -16,6 +16,11 @@
 .tabterm-menu {
   position: fixed; top: 0; right: 0; margin: 1em;
   &:not(:hover) { opacity: .5; }
+
+  .tabterm-menu-url {
+    padding: 3px 20px; color: @dropdown-link-color;
+    input { display: inline-block; width: auto; background-color: @dropdown-divider-bg; color: @dropdown-link-color; }
+  }
 }
 
 .full-height { height: 100%; }
