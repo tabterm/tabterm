@@ -7,18 +7,24 @@ What if your browser's new tab page was a terminal? Based on Chrome OS's
 
 ## Installation
 ```sh
-$ npm install -g tabterm
+$ brew install tabterm/taps/tabterm # homebrew formula, includes a LaunchAgent that starts tabterm on login
 ```
-
-## Usage
+Or:
 ```sh
-$ tabterm
+$ npm install -g tabterm # install tabterm
+$ tabterm # start the daemon manually
 TabTermServer started: http://127.0.0.1:7473
 ```
 
-### New tab page
+We recommend using your OS's tabterm package. If you installed tabterm via a
+package and are using the package's startup script, you are set! Just visit
+[localhost:7473](http://localhost:7473) and observe the shiny new terminal.
+Otherwise start the daemon manually using the instructions above.
 
-#### Chrome
+
+## New tab page
+
+### Chrome
 
 * Install [New Tab Redirect](https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en)
 * Open `chrome-extension://icpgjfneehieebagbmdbhnlpiopdcmna/options.html`
