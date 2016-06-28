@@ -2,8 +2,8 @@
   "name": "tabterm",
   "version": "1.2.0",
   "description": "What if your browser's new tab page was a terminal? Based on Chrome OS's hterm",
-  "homepage": "https://github.com/dbkaplun/tabterm#readme",
-  "bugs": "https://github.com/dbkaplun/tabterm/issues",
+  "homepage": "https://github.com/tabterm/tabterm#readme",
+  "bugs": "https://github.com/tabterm/tabterm/issues",
   "main": "src/back",
   "bin": "src/back/index.js",
   "preferGlobal": true,
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dbkaplun/tabterm.git"
+    "url": "git+https://github.com/tabterm/tabterm.git"
   },
   "dependencies": {
     "bluebird": "^3.0.5",
