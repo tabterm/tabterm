@@ -1,6 +1,6 @@
 {
   "name": "tabterm",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "What if your browser's new tab page was a terminal? Based on Chrome OS's hterm",
   "homepage": "https://github.com/tabterm/tabterm#readme",
   "bugs": "https://github.com/tabterm/tabterm/issues",
