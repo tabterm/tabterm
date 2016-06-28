@@ -24,6 +24,7 @@
     "opn": "4.0.0",
     "pty.js": "learnlinux/pty.js#f125ff0",
     "rc": "1.1.6",
+    "shell-env": "0.1.1",
     "socket.io": "^1.4.6"
   },
   "devDependencies": {

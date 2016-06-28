@@ -2,4 +2,4 @@
 
 module.exports = require('./TabTermServer')
 
-if (require.main === module) new module.exports(require('../../config')).main()
+if (require.main === module) module.exports.getDefaultOpts().then(opts => new module.exports(opts).start()).done()

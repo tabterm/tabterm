@@ -8,17 +8,46 @@ const Promise = require('bluebird')
 const _ = require('lodash')
 const opn = require('opn')
 const crypto = require('crypto')
+const rc = require('rc')
+const shellEnv = require('shell-env')
 
 const Session = require('./Session')
+const pkg = require('../../package')
+
+const formatError = err => (err || {}).stack || err || "unknown error";
 
 class TabTermServer {
+  static getDefaultOpts () {
+    return Promise.resolve(shellEnv())
+      .catch(err => { console.error(formatError(err)); return process.env })
+      .then(env => rc(pkg.name, {
+        hostname: env.HOSTNAME || 'localhost',
+        port: parseInt(env.PORT, 10) || 7473,
+        open: false,
+        session: {
+          timeoutMs: 5*60*1000, // 5 minutes
+          pty: {
+            file: env.SHELL,
+            args: [],
+            opt: {
+              name: 'xterm-color',
+              cols: 80,
+              rows: 24,
+              cwd: env.HOME,
+              env: env
+            }
+          }
+        }
+      }))
+  }
+
   constructor (opts) {
     this.opts = opts
     this.sessions = {}
-    this.initApp()
+    this.init()
   }
 
-  initApp () {
+  init () {
     var app = this.app = express()
     var server = this.server = http.Server(app)
     var io = this.io = socketio(server)
@@ -50,34 +79,27 @@ class TabTermServer {
           if (socket !== deregisteredSocket) return
           console.log(`${sessionPrefixStr}disconnect, ${session.sockets.length} socket${session.sockets.length === 1 ? "" : "s"} still attached to the session`)
         })
-        socket.on('error', err => { console.error(`${sessionPrefixStr}${(err || {}).stack || err || "unknown error"}`) })
+        socket.on('error', err => { console.error(`${sessionPrefixStr}${formatError(err)}`) })
       })
     })
-  }
-
-  listen () {
-    return new Promise(resolve => { this.server.listen(this.opts.port, this.opts.hostname, resolve) })
-      .then(() => {
-        this.address = this.server.address()
-        return this.address
-      })
   }
 
   get url () {
     return this.address && `http://${this.address.address}:${this.address.port}`
   }
 
-  main () {
-    this.listen()
-      .tap(() => {
+  start () {
+    return new Promise(resolve => { this.server.listen(this.opts.port, this.opts.hostname, resolve) })
+      .then(() => {
+        this.address = this.server.address()
         let url = this.url
-        console.error(`TabTermServer started: ${url}`)
+        console.log(`TabTermServer started: ${url}`)
         if (this.opts.open) {
-          console.error("(opts.open = true, opening)")
+          console.log("(opts.open = true, opening)")
           opn(url)
         }
+        return this
       })
-      .done()
   }
 }
 

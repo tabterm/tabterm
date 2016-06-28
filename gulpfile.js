@@ -25,7 +25,6 @@ const flatten = require('gulp-flatten')
 const htmlmin = require('gulp-htmlmin')
 
 const TabTermServer = require('./src/back/TabTermServer')
-const config = require('./config')
 
 const src = 'src/front/'
 const dist = 'dist/'
@@ -79,9 +78,9 @@ gulp.task('watch', ['pre-watch', 'build'], () => {
   gulp.watch('**/*.html', ['build-html'])
 })
 
-gulp.task('serve', () => {
-  new TabTermServer(config).main()
-})
+gulp.task('serve', () => (
+  TabTermServer.getDefaultOpts().then(opts => new TabTermServer(opts).start())
+))
 
 gulp.task('dev', ['watch', 'serve'])
 gulp.task('default', ['serve'])
