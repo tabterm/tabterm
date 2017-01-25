@@ -1,4 +1,4 @@
 {
-  "presets": ["es2015", "react"],
+  "presets": ["latest", "react"],
   "plugins": ["syntax-object-rest-spread"]
 }

@@ -10,6 +10,12 @@ import contextTypes from './contextTypes'
 
 import pkg from '../../../package'
 
+export const CTRL_RE = /Ctrl-/i;
+export const RESERVED_BROWSER_BINDINGS = ['Ctrl-Alt-I', 'Ctrl-L', 'Ctrl-R'].reduce((bs, b) => {
+  if (b.match(CTRL_RE)) bs.push(b.replace(CTRL_RE, 'Meta-'));
+  return [...bs, b];
+}, []);
+
 export default React.createClass({
   childContextTypes: _.pick(contextTypes, 'tabterm'),
   getChildContext () { return {tabterm: this} },
@@ -19,7 +25,9 @@ export default React.createClass({
       settings: {
         maxVisibleAlertCount: 5,
         css: '',
-        htermOpts: {},
+        htermOpts: {
+          keybindings: RESERVED_BROWSER_BINDINGS.reduce((keybindings, b) => _.set(keybindings, b, 'PASS'), {})
+        },
         sessionOpts: {}
       },
       alerts: [],
