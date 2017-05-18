@@ -26,7 +26,7 @@ Otherwise start the daemon manually using the instructions above.
 
 ### Chrome
 
-* Install [New Tab Redirect](https://chrome.google.com/webstore/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna?hl=en)
-* Open `chrome-extension://icpgjfneehieebagbmdbhnlpiopdcmna/options.html`
-* Set the Redirect URL to `http://localhost:7473`
+* Install [New Tab iFrame](https://chrome.google.com/webstore/detail/new-tab-iframe/pjjgnpjhedgolccfdplecmnapdjhlknm)
+* Open `chrome-extension://pjjgnpjhedgolccfdplecmnapdjhlknm/options.html`
+* Set the URL to `http://localhost:7473`
 * Observe your new tab page is now a terminal
